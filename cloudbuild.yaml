@@ -1,0 +1,14 @@
+steps:
+    - name: 'gcr.io/cloud-builders/go'
+      args: ['get', 'github.com/kokukuma/gcr-proxy/proxy']
+      env: ['PROJECT_ROOT=proxy']
+
+    - name: 'gcr.io/cloud-builders/go'
+      args: ['test', 'proxy/proxy_test.go']
+      env: ['PROJECT_ROOT=proxy']
+
+    - name: 'gcr.io/cloud-builders/docker'
+      args: ['build', '-t', 'gcr.io/$PROJECT_ID/gcrproxy', '.']
+
+images:
+    - 'gcr.io/$PROJECT_ID/gcrproxy'
