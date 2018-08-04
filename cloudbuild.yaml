@@ -1,11 +1,12 @@
 steps:
     - name: 'gcr.io/cloud-builders/go'
-      args: ['get', 'github.com/kokukuma/gcr-proxy/proxy']
-      env: ['PROJECT_ROOT=proxy']
+      args: ['install', '.']
+      env: ['PROJECT_ROOT=github.com/kokukuma/gcr-proxy']
+      dir: 'proxy'
 
     - name: 'gcr.io/cloud-builders/go'
       args: ['test', 'proxy/proxy_test.go']
-      env: ['PROJECT_ROOT=proxy']
+      env: ['PROJECT_ROOT=github.com/kokukuma/gcr-proxy']
 
     - name: 'gcr.io/cloud-builders/docker'
       args: ['build', '-t', 'gcr.io/$PROJECT_ID/gcrproxy', '.']
