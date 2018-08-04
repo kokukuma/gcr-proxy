@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -12,11 +11,11 @@ import (
 
 func main() {
 	// load json key
-	jsonKeyPath := os.Getenv("SERVICE_ACCOUNT_PATH")
-	jsonKey, err := ioutil.ReadFile(jsonKeyPath)
-	if err != nil {
-		panic(err)
-	}
+	// jsonKeyPath := os.Getenv("SERVICE_ACCOUNT_PATH")
+	// jsonKey, err := ioutil.ReadFile(jsonKeyPath)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	// proxyHost
 	proxyHost := os.Getenv("PROXY_HOST")
@@ -32,12 +31,14 @@ func main() {
 	// new proxy
 	logger := log.New(os.Stdout, "[GCR Proxy] ", log.LstdFlags)
 
-	proxy := proxy.NewProxy(proxyAuth, jsonKey, proxyHost)
+	//proxy := proxy.NewProxy(proxyAuth, jsonKey, proxyHost)
+	proxy := proxy.NewProxy(proxyAuth, []byte{}, proxyHost)
 	proxy.SetLogger(logger)
 
-	keyFile := os.Getenv("KEY_PATH")
-	crtFile := os.Getenv("CRT_PATH")
+	// keyFile := os.Getenv("KEY_PATH")
+	// crtFile := os.Getenv("CRT_PATH")
 
 	logger.Print("Start GCR Proxy")
-	logger.Fatal(http.ListenAndServeTLS(":8000", crtFile, keyFile, proxy))
+	// logger.Fatal(http.ListenAndServeTLS(":8000", crtFile, keyFile, proxy))
+	logger.Fatal(http.ListenAndServe(":8000", proxy))
 }
