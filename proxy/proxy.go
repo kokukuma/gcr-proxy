@@ -22,6 +22,8 @@ type Proxy struct {
 }
 
 func (proxy *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.IsAbs())
+	fmt.Println(r.URL.Scheme)
 	baseHost := r.Host
 
 	// Before exec request (checkAuthenticate and rewrite request)
@@ -90,6 +92,7 @@ func (proxy *Proxy) rewriteAuthorizationHeader(r *http.Request) {
 
 func (proxy *Proxy) rewriteAuthenticateHeader(resp *http.Response, host string) {
 	resp.Header.Del("Www-Authenticate")
+	// TODO: proxyをhttpで使ったとき,
 	resp.Header.Add("Www-Authenticate", fmt.Sprintf("Bearer realm=\"https://%s/v2/token\",service=\"gcr.io\"", host))
 }
 

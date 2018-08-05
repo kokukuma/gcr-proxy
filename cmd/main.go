@@ -39,6 +39,6 @@ func main() {
 	// crtFile := os.Getenv("CRT_PATH")
 
 	logger.Print("Start GCR Proxy")
-	// logger.Fatal(http.ListenAndServeTLS(":8000", crtFile, keyFile, proxy))
+	//logger.Fatal(http.ListenAndServeTLS(":8000", crtFile, keyFile, proxy))
 	logger.Fatal(http.ListenAndServe(":8000", proxy))
 }
