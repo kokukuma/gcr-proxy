@@ -59,11 +59,11 @@ func main() {
 }
 
 func getcertManager() (*autocert.Manager, error) {
-	registryUrl := os.Getenv("REGISTRY_URL")
-	if registryUrl == "" {
-		return nil, fmt.Errorf("Invalid REGISTRY_URL %s", registryUrl)
+	proxyUrl := os.Getenv("PROXY_URL")
+	if proxyUrl == "" {
+		return nil, fmt.Errorf("Invalid PROXY_URL %s", proxyUrl)
 	}
-	u, err := url.Parse(registryUrl)
+	u, err := url.Parse(proxyUrl)
 	if err != nil {
 		return nil, err
 	}
