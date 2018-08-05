@@ -27,7 +27,7 @@ func (proxy *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Before exec request (checkAuthenticate and rewrite request)
 	if r.URL.Path == "/v2/token" {
 		if err := proxy.checkAuthenticate(r); err != nil {
-			proxy.handleError(w, 500, err)
+			proxy.handleError(w, 403, err)
 			return
 		}
 		proxy.rewriteAuthorizationHeader(r)
@@ -63,11 +63,15 @@ func (proxy *Proxy) handleError(w http.ResponseWriter, status int, err error) {
 func (proxy *Proxy) checkAuthenticate(r *http.Request) error {
 	authHeader := r.Header.Get("Authorization")
 	data := strings.Split(authHeader, " ")
+	fmt.Println(data)
 	if len(data) == 2 {
 		data, err := base64.StdEncoding.DecodeString(data[1])
 		if err != nil {
 			return err
 		}
+
+		fmt.Println(string(data))
+		fmt.Println(proxy.authData)
 
 		if string(data) == proxy.authData {
 			return nil
