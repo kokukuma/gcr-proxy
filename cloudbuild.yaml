@@ -1,13 +1,14 @@
 steps:
-    # TEST: docker-compose up
+    # TMP: docker-compose up
     - name: 'gcr.io/$PROJECT_ID/docker-compose'
       args: ['up', '-d']
 
-    # TEST: curl web
+    # TMP: curl web
     - name: 'gcr.io/cloud-builders/docker'
       entrypoint: 'curl'
       args: ['web']
 
+    # TEST
     - name: 'gcr.io/cloud-builders/go'
       args: ['install', '.']
       env: ['PROJECT_ROOT=github.com/kokukuma/gcr-proxy']
@@ -17,10 +18,24 @@ steps:
       args: ['test', 'proxy/proxy_test.go']
       env: ['PROJECT_ROOT=github.com/kokukuma/gcr-proxy']
 
+    # BUILD
     - name: 'gcr.io/cloud-builders/docker'
       args: ['build', '-t', 'gcr.io/$PROJECT_ID/gcrproxy', '.']
 
-    # TEST: docker-compose down
+    # DEPLOY
+    - name: 'gcr.io/cloud-builders/kubectl'
+      args: ['apply', '-f', 'k8s/deployment.yaml']
+      env:
+        CLOUDSDK_COMPUTE_ZONE: 'asia-east1-a'
+        CLOUDSDK_CONTAINER_CLUSTER: 'gcr-proxy'
+
+    - name: 'gcr.io/cloud-builders/kubectl'
+      args: ['apply', '-f', 'k8s/service.yaml']
+      env:
+        CLOUDSDK_COMPUTE_ZONE: 'asia-east1-a'
+        CLOUDSDK_CONTAINER_CLUSTER: 'gcr-proxy'
+
+    # TMP: docker-compose down
     - name: 'gcr.io/$PROJECT_ID/docker-compose'
       args: ['down']
 
