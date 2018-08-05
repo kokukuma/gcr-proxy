@@ -1,5 +1,10 @@
 export CRT_PATH=""
 export KEY_PATH=""
 export SERVICE_ACCOUNT_PATH=""
-export PROXY_HOST=""
+
+export PROXY_URL=""
 export PROXY_AUTH=""  # user:password
+export REGISTRY_URL=""
+
+export SERVICE_ACCOUNT_BASE64=$(cat ${SERVICE_ACCOUNT_PATH} | base64)
+export PROXY_AUTH_BASE64="$(echo ${PROXY_AUTH} | base64)"
