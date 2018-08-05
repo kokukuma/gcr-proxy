@@ -35,15 +35,30 @@ func main() {
 	// logger.Fatal(http.ListenAndServe(":8000", proxy))
 
 	// autocert
-	logger.Print("Start GCR Proxy")
-	server, err := getServer()
+	certManager, err := getcertManager()
 	if err != nil {
 		panic(err)
 	}
+
+	// http-01 Challenge(ドメインの所有確認)、HTTPSへのリダイレクト用のサーバー
+	challengeServer := &http.Server{
+		Handler: certManager.HTTPHandler(nil),
+		Addr:    ":8080",
+	}
+	go challengeServer.ListenAndServe()
+
+	// proxy server
+	server := &http.Server{
+		Addr:      ":8443",
+		TLSConfig: certManager.TLSConfig(),
+		Handler:   proxy,
+	}
+
+	logger.Print("Start GCR Proxy")
 	logger.Fatal(server.ListenAndServeTLS("", ""))
 }
 
-func getServer() (*http.Server, error) {
+func getcertManager() (*autocert.Manager, error) {
 	registryUrl := os.Getenv("REGISTRY_URL")
 	if registryUrl == "" {
 		return nil, fmt.Errorf("Invalid REGISTRY_URL %s", registryUrl)
@@ -53,25 +68,12 @@ func getServer() (*http.Server, error) {
 		return nil, err
 	}
 
-	certManager := autocert.Manager{
+	certManager := &autocert.Manager{
 		Prompt:     autocert.AcceptTOS,             // Let's Encryptの利用規約への同意
 		HostPolicy: autocert.HostWhitelist(u.Host), // ドメイン名
 		Cache:      autocert.DirCache("certs"),     // 証明書などを保存するフォルダ
 	}
-
-	// http-01 Challenge(ドメインの所有確認)、HTTPSへのリダイレクト用のサーバー
-	challengeServer := &http.Server{
-		Handler: certManager.HTTPHandler(nil),
-		Addr:    ":8080",
-	}
-
-	go challengeServer.ListenAndServe()
-
-	server := &http.Server{
-		Addr:      ":8443",
-		TLSConfig: certManager.TLSConfig(),
-	}
-	return server, nil
+	return certManager, nil
 }
 
 func getProxy() (*proxy.Proxy, error) {
