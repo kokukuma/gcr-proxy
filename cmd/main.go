@@ -18,10 +18,10 @@ func main() {
 		panic(err)
 	}
 
-	// proxyHost
-	proxyHost := os.Getenv("PROXY_HOST")
-	if proxyHost == "" {
-		panic(fmt.Sprintf("Invalid PROXY_HOST %s", proxyHost))
+	// proxyUrl
+	proxyUrl := os.Getenv("PROXY_URL")
+	if proxyUrl == "" {
+		panic(fmt.Sprintf("Invalid PROXY_URL %s", proxyUrl))
 	}
 
 	proxyAuth := os.Getenv("PROXY_AUTH")
@@ -29,10 +29,18 @@ func main() {
 		panic(fmt.Sprintf("Invalid PROXY_AUTH %s", proxyAuth))
 	}
 
+	registryUrl := os.Getenv("REGISTRY_URL")
+	if registryUrl == "" {
+		panic(fmt.Sprintf("Invalid REGISTRY_URL %s", registryUrl))
+	}
+
 	// new proxy
 	logger := log.New(os.Stdout, "[GCR Proxy] ", log.LstdFlags)
 
-	proxy := proxy.NewProxy(proxyAuth, jsonKey, proxyHost)
+	proxy, err := proxy.NewProxy(proxyAuth, jsonKey, proxyUrl, registryUrl)
+	if err != nil {
+		panic(err)
+	}
 	proxy.SetLogger(logger)
 
 	// keyFile := os.Getenv("KEY_PATH")

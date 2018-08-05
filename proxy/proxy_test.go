@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/kokukuma/gcr-proxy/proxy"
@@ -41,8 +40,10 @@ func (h FakeGCRHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 var https = httptest.NewTLSServer(FakeGCRHandler{})
 
 func getProxyServer(url string) *httptest.Server {
-	host := strings.Replace(https.URL, "https://", "", -1)
-	proxy := proxy.NewProxy("test-user:test-password", []byte("test-key"), host)
+	proxy, err := proxy.NewProxy("test-user:test-password", []byte("test-key"), "", url)
+	if err != nil {
+		panic(err)
+	}
 
 	// // テスト用にログ削除
 	// proxy.SetLogger(log.New(ioutil.Discard, "", log.LstdFlags))
@@ -55,6 +56,7 @@ func getProxyServer(url string) *httptest.Server {
 	})
 
 	server := httptest.NewTLSServer(proxy)
+	proxy.SetProxyUrl(server.URL)
 	return server
 }
 
