@@ -63,16 +63,11 @@ func (proxy *Proxy) handleError(w http.ResponseWriter, status int, err error) {
 func (proxy *Proxy) checkAuthenticate(r *http.Request) error {
 	authHeader := r.Header.Get("Authorization")
 	data := strings.Split(authHeader, " ")
-	fmt.Println(data)
 	if len(data) == 2 {
 		data, err := base64.StdEncoding.DecodeString(data[1])
 		if err != nil {
 			return err
 		}
-
-		fmt.Println(string(data))
-		fmt.Println(proxy.authData)
-		fmt.Println(strings.TrimRight(proxy.authData, "\n"))
 
 		if string(data) == strings.TrimRight(proxy.authData, "\n") {
 			return nil
