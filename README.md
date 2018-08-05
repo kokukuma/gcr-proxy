@@ -25,6 +25,7 @@
   ```
 
 ## 立ち上げ方
+### https
 + いろいろホストに置く
   + サーバ証明書, 秘密鍵, サービスアカウントのJson Key.
   + 下の例では, /Users/karino-t/sa/以下に置いてある.
@@ -43,3 +44,9 @@
              -p 443:8000 \
              gcrproxy
   ```
+### k8s
+```
+kubectl apply -f k8s/deployment.yml
+kubectl apply -f k8s/service.yml
+envsubst < k8s/secret.yml | kubectl apply -f -
+```
