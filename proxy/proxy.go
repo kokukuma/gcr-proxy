@@ -72,8 +72,9 @@ func (proxy *Proxy) checkAuthenticate(r *http.Request) error {
 
 		fmt.Println(string(data))
 		fmt.Println(proxy.authData)
+		fmt.Println(strings.TrimRight(proxy.authData, "\n"))
 
-		if string(data) == proxy.authData {
+		if string(data) == strings.TrimRight(proxy.authData, "\n") {
 			return nil
 		}
 	}
