@@ -26,14 +26,14 @@ steps:
     - name: 'gcr.io/cloud-builders/kubectl'
       args: ['apply', '-f', 'k8s/deployment.yaml']
       env:
-        - CLOUDSDK_COMPUTE_ZONE='asia-east1-a'
-        - CLOUDSDK_CONTAINER_CLUSTER='gcr-proxy'
+        - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
+        - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
 
     - name: 'gcr.io/cloud-builders/kubectl'
       args: ['apply', '-f', 'k8s/service.yaml']
       env:
-        - CLOUDSDK_COMPUTE_ZONE='asia-east1-a'
-        - CLOUDSDK_CONTAINER_CLUSTER='gcr-proxy'
+        - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
+        - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
 
     # TMP: docker-compose down
     - name: 'gcr.io/$PROJECT_ID/docker-compose'
