@@ -24,13 +24,13 @@ steps:
 
     # DEPLOY
     - name: 'gcr.io/cloud-builders/kubectl'
-      args: ['apply', '-f', 'k8s/deployment.yaml']
+      args: ['apply', '-f', 'k8s/deployment.yml']
       env:
         - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
         - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
 
     - name: 'gcr.io/cloud-builders/kubectl'
-      args: ['apply', '-f', 'k8s/service.yaml']
+      args: ['apply', '-f', 'k8s/service.yml']
       env:
         - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
         - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
