@@ -39,11 +39,14 @@
   docker run -e CRT_PATH="/sa/CERT.pem" \
              -e KEY_PATH="/sa/PRIVATE-KEY-Dec.pem" \
              -e SERVICE_ACCOUNT_PATH="/sa/gcr-proxy-sa.json" \
-             -e PROXY_HOST=${PROXY_HOST} \
+             -e PROXY_AUTH=${PROXY_AUTH} \
+             -e PROXY_URL=${PROXY_URL_LOCAL} \
+             -e REGISTRY_URL=${REGISTRY_URL} \
              -v /Users/karino-t/go/src/github.com/kokukuma/gcr-proxy/cert:/sa/ \
              -p 443:8000 \
              gcrproxy
   ```
+
 ### k8s
 ```
 kubectl apply -f k8s/deployment.yml

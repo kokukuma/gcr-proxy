@@ -11,7 +11,7 @@ RUN make
 # runtime image
 FROM alpine
 RUN apk add --no-cache ca-certificates
-COPY --from=builder /go/src/github.com/kokukuma/gcr-proxy/app /app
+COPY --from=builder /go/src/github.com/kokukuma/gcr-proxy/autocert /autocert
 EXPOSE 8000
-ENTRYPOINT ["/app"]
+ENTRYPOINT ["/autocert"]
 

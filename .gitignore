@@ -1,3 +1,6 @@
 app
+autocert
+http
+https
 .envrc
 cert/

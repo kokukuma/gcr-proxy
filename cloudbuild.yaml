@@ -1,12 +1,12 @@
 steps:
-    # TMP: docker-compose up
-    - name: 'gcr.io/$PROJECT_ID/docker-compose'
-      args: ['up', '-d']
-
-    # TMP: curl web
-    - name: 'gcr.io/cloud-builders/docker'
-      entrypoint: 'curl'
-      args: ['web']
+    # # TMP: docker-compose up
+    # - name: 'gcr.io/$PROJECT_ID/docker-compose'
+    #   args: ['up', '-d']
+    #
+    # # TMP: curl web
+    # - name: 'gcr.io/cloud-builders/docker'
+    #   entrypoint: 'curl'
+    #   args: ['web']
 
     # TEST
     - name: 'gcr.io/cloud-builders/go'
@@ -22,22 +22,22 @@ steps:
     - name: 'gcr.io/cloud-builders/docker'
       args: ['build', '-t', 'gcr.io/$PROJECT_ID/gcrproxy', '.']
 
-    # DEPLOY
-    - name: 'gcr.io/cloud-builders/kubectl'
-      args: ['apply', '-f', 'k8s/deployment.yml']
-      env:
-        - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
-        - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
-
-    - name: 'gcr.io/cloud-builders/kubectl'
-      args: ['apply', '-f', 'k8s/service.yml']
-      env:
-        - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
-        - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
-
-    # TMP: docker-compose down
-    - name: 'gcr.io/$PROJECT_ID/docker-compose'
-      args: ['down']
+#     # DEPLOY
+#     - name: 'gcr.io/cloud-builders/kubectl'
+#       args: ['apply', '-f', 'k8s/deployment.yml']
+#       env:
+#         - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
+#         - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
+#
+#     - name: 'gcr.io/cloud-builders/kubectl'
+#       args: ['apply', '-f', 'k8s/service.yml']
+#       env:
+#         - CLOUDSDK_COMPUTE_ZONE=asia-east1-a
+#         - CLOUDSDK_CONTAINER_CLUSTER=gcr-proxy
+#
+#     # TMP: docker-compose down
+#     - name: 'gcr.io/$PROJECT_ID/docker-compose'
+#       args: ['down']
 
 images:
     - 'gcr.io/$PROJECT_ID/gcrproxy'

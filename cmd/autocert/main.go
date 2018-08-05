@@ -24,16 +24,6 @@ func main() {
 	}
 	proxy.SetLogger(logger)
 
-	// // https
-	// keyFile := os.Getenv("KEY_PATH")
-	// crtFile := os.Getenv("CRT_PATH")
-	// logger.Print("Start GCR Proxy")
-	// logger.Fatal(http.ListenAndServeTLS(":8000", crtFile, keyFile, proxy))
-
-	// // http
-	// logger.Print("Start GCR Proxy")
-	// logger.Fatal(http.ListenAndServe(":8000", proxy))
-
 	// autocert
 	certManager, err := getcertManager()
 	if err != nil {
